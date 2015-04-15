@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>	
+	<!-- 系统相关参数设置 -->	
+	<system>
+		<systemName>基础框架</systemName>
+		<webPath>/kingtopBase</webPath>
+		<uploadFilesPath>D:/files/kingtopBase/</uploadFilesPath>
+	</system>
+	<!-- 系统启动参数设置 -->	
+	<startup>		
+		<!-- 异常加载参数 -->		
+		<exception>
+			<systemException>resources/systemException.xml</systemException>
+			<appException>classpath*:resources/exception/*Exception.xml</appException>
+		</exception>
+	</startup>
+</config>

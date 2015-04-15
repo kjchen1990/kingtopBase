@@ -1,0 +1,133 @@
+@CHARSET "UTF-8";
+body {
+	background: #f1f1f1;
+}
+
+#register{
+	width: 990px;
+	height: 460px;
+	margin: 50px auto;
+	border: solid 1px #dddddd;
+	background: #fff;
+}
+#register form {
+	margin-top: 20px;
+}
+#register div.hgroup {
+	height: 60px;
+}
+#register .register_label {
+	width: 165px;
+	color: #999999;
+	float: left;
+	text-align: right;
+	font-size: 14px;
+	margin-top: 20px;
+}
+#register .register_label b {
+	color: #ff0000;
+}
+#register .register_item {
+	float: left;
+	position: relative;
+	width: 340px;
+	height: 35px;
+	border: solid 1px #dddddd;
+	margin-left: 18px;
+	margin-top: 12px;
+}
+#register .register_item_focus {
+	border: solid 1px #7abd54;
+}
+#register .register_item input {
+	width: 308px;
+	height: 31px;
+	font-size: 14px;
+	border: none;
+	margin-left: 5px;
+	margin-top: 1px;
+}
+#register .prompt {
+	float: left;
+	position: relative;
+	width: 330px;
+	height: 35px;
+	border: solid 1px #dddddd;
+	margin-left: 15px;
+	margin-top: 12px;
+}
+#register .errorPrompt {
+	border: solid 1px #ffbdbe;
+}
+#register .prompt span {
+	color: #666;
+	position: relative;
+	top: 10px;
+	left: 10px;
+}
+#register .errorPrompt span {
+	color: #ff0000;
+}
+/* 验证码 */
+#yzm_input {
+	float: left;
+	position: relative;
+	width: 180px;
+	height: 35px;
+	border: solid 1px #dddddd;
+	margin-left: 18px;
+	margin-top: 12px;
+}
+#yzm_input input {
+	width: 170px;
+	height: 31px;
+	font-size: 14px;
+	margin-left: 5px;
+	border: none;
+}
+#yzm_img_bg {
+	width: 140px;
+	height: 35px;
+	background: #f1f1f1;
+	margin-left: 20px;
+	margin-top: 12px;
+	float: left;
+}
+#yzm_img_bg span {
+	position: relative;
+	top: 10px;
+	left: 50px;
+}
+/**协议**/
+#register .register_protocol {
+	float: left;
+	position: relative;
+	width: 330px;
+	height: 35px;
+	margin-left: 15px;
+	margin-top: 12px;
+}
+#register .register_protocol input {
+	width: 17px;
+	height: 17px;
+	position: relative;
+	top: 4px;
+}
+#register .register_protocol a {
+	color:  #005aa0;
+	font-size: 13px;
+	position: relative;
+	top: 2px;
+}
+#register .protocol {
+	margin-left: 30px;
+}
+/**立即注册**/
+#register #regiter_btn {
+	background: #096993;
+	width: 340px;
+	height: 35px;
+	margin: 0px;
+	color: #fff;
+	font-weight: bold;
+}

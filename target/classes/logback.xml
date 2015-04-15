@@ -1,0 +1,74 @@
+<configuration scan="true" scanPeriod="60000" >
+	<property name="APP_Name" value="kingtopBase" />
+	<property name="LOG_BASEDIR" value="L:\\log" />
+	<contextName>${APP_Name}</contextName>
+	<!-- 控制台输出 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<!-- action按照每天生成日志文件 -->
+	<appender name="actionLog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.action.html</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.action.logFile.%d{yyyy-MM-dd}.html
+			</fileNamePattern>
+			<maxHistory>90</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.html.HTMLLayout">
+			<pattern>%contextName%date%level%10logger%msg</pattern>
+		</layout>
+	</appender>
+	<appender name="serviceLog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.service.html</file>
+		<layout class="ch.qos.logback.classic.html.HTMLLayout">
+			<pattern>%date%level%thread%10logger%file%line%msg</pattern>
+		</layout>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.service.%i.html
+			</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>30</maxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>1MB</maxFileSize>
+		</triggeringPolicy>
+	</appender>
+	<appender name="systemLog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.system.html</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.action.logFile.%d{yyyy-MM-dd}.html
+			</fileNamePattern>
+			<maxHistory>90</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.html.HTMLLayout">
+			<pattern>%contextName%date%level%10logger%msg</pattern>
+		</layout>
+	</appender>
+	<logger name="cn.kingtop.sys.action" addtivity="false" level="INFO">
+		<appender-ref ref="actionLog" />
+	</logger>
+	<logger name="cn.kingtop..dao" addtivity="false" level="INFO">
+		<appender-ref ref="serviceLog" />
+	</logger>
+	<logger name="cn.kingtop..service" addtivity="false" level="INFO">
+		<appender-ref ref="serviceLog" />
+	</logger>
+	<logger name="cn.kingtop.shiro"  level="DEBUG"></logger>
+	<logger name="org" level="info">
+		<appender-ref ref="systemLog"/>
+	</logger>
+	<logger name="org.apache.catalina.core.ContainerBase" level="OFF"></logger>
+	
+	<logger name="org.apache.catalina.session" level="OFF"></logger>
+	
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
