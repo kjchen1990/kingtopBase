@@ -1,8 +1,17 @@
 package org.kingtop.lang;
 
 public class ErrorCode {
+	/**
+	 * 错误代码
+	 */
 	private String code;
+	/**
+	 * 用户看到的错误信息
+	 */
 	private String userMessage;
+	/**
+	 * 开发人员开到的错误信息
+	 */
 	private String errorMessage;
 
 	public String getCode() {

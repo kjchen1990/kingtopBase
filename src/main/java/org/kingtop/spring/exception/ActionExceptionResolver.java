@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.kingtop.action.BaseAction;
 import org.kingtop.action.Result;
 import org.kingtop.lang.BaseException;
 import org.kingtop.util.JsonUtil;
@@ -23,10 +22,8 @@ public class ActionExceptionResolver implements HandlerExceptionResolver {
 
 	public ModelAndView resolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
-		System.out.println("异常处理开始:" + handler.getClass());
 		String jsonString = "";
 		try {
-			//BaseAction baseAction = (BaseAction) handler;
 			Result result = null;
 			if (ex instanceof BaseException) {
 				result = new Result(false, ex.getMessage());
@@ -36,11 +33,13 @@ public class ActionExceptionResolver implements HandlerExceptionResolver {
 				result = new Result(false, baseException.getMessage());
 			}
 			jsonString = JsonUtil.toString(result);
-			//logger.error(jsonString);
-			System.out.println("输出异常"+jsonString);
 		} catch (Exception exception) {
+			exception.printStackTrace();
 		}
 		try {
+			//HandlerMethod handlerMethod = (HandlerMethod)handler;
+			//ResponseBody responseBody = handlerMethod.getMethodAnnotation(ResponseBody.class);
+			
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.print(jsonString);

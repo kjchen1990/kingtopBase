@@ -17,31 +17,19 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 public class ExceptionConfig {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public static Map databaseMap = new HashMap();
+	public static Map<String, Object> systemMap = new HashMap<String, Object>();
 
-	public static Map systemMap = new HashMap();
+	public static Map<String, Object> applyMap = new HashMap<String, Object>();
 
-	public static Map ruleMap = new HashMap();
-
-	public static Map applyMap = new HashMap();
-
+	@SuppressWarnings("rawtypes")
 	public ExceptionConfig() {
 		try {
 			this.logger.info("start loading Exception Config...");
 			SAXReader saxReader = new SAXReader();
 			InputStream sysExceptionIs = getClass().getClassLoader().getResourceAsStream(Config.systemExceptionFile);
 			Document document = saxReader.read(sysExceptionIs);
-			Iterator it = document.selectNodes("/errorcode/databases/database").iterator();
-			while (it.hasNext()) {
-				Element element = (Element) it.next();
-				ErrorCode errorCode = new ErrorCode();
-				errorCode.setCode(element.selectSingleNode("code").getText());
-				errorCode.setUserMessage(element.selectSingleNode("userMessage").getText());
-				errorCode.setErrorMessage(element.selectSingleNode("errorMessage").getText());
-				databaseMap.put(element.selectSingleNode("class").getText(), errorCode);
-			}
 
-			it = document.selectNodes("/errorcode/systems/system").iterator();
+			Iterator it = document.selectNodes("/errorcode/systems/system").iterator();
 			while (it.hasNext()) {
 				Element element = (Element) it.next();
 				ErrorCode errorCode = new ErrorCode();
@@ -49,16 +37,6 @@ public class ExceptionConfig {
 				errorCode.setUserMessage(element.selectSingleNode("userMessage").getText());
 				errorCode.setErrorMessage(element.selectSingleNode("errorMessage").getText());
 				systemMap.put(element.selectSingleNode("class").getText(), errorCode);
-			}
-
-			it = document.selectNodes("/errorcode/rules/rule").iterator();
-			while (it.hasNext()) {
-				Element element = (Element) it.next();
-				ErrorCode errorCode = new ErrorCode();
-				errorCode.setCode(element.selectSingleNode("code").getText());
-				errorCode.setUserMessage(element.selectSingleNode("userMessage").getText());
-				errorCode.setErrorMessage(element.selectSingleNode("errorMessage").getText());
-				ruleMap.put(element.selectSingleNode("class").getText(), errorCode);
 			}
 
 			it = document.selectNodes("/errorcode/applys/apply").iterator();

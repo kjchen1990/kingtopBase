@@ -64,8 +64,6 @@ public class SysUserAction extends BaseAction{
 			error = "其他错误：" + exceptionClassName;
 		}
 		model.addAttribute("error", error);
-		if(error != null && !"".equals(error))
-			throw new BaseException(new AuthenticationException(),log);
 		return "login";
 	}
 	
