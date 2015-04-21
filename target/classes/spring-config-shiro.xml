@@ -24,6 +24,7 @@
 
     <!-- Realm实现 -->
     <bean id="userRealm" class="cn.kingtop.shiro.realms.UserRealm">
+    	<constructor-arg ref="cacheManager"/>
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="false"/>
         <!--<property name="authenticationCachingEnabled" value="true"/>-->

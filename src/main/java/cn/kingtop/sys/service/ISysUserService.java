@@ -28,5 +28,5 @@ public interface ISysUserService extends IBaseService<SysUser>{
 	 * @return
 	 */
 	SysUser findByUsername(String username);
-
+	
 }

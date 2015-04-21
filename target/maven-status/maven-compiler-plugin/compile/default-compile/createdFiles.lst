@@ -14,7 +14,6 @@ org\kingtop\action\Result.class
 org\kingtop\action\annotation\CurrentUser.class
 cn\kingtop\shiro\realms\UserRealm.class
 org\kingtop\service\BaseService.class
-org\kingtop\lang\BaseException$TYPE.class
 cn\kingtop\shiro\util\PasswordHelper.class
 cn\kingtop\sys\model\SysUser.class
 cn\kingtop\sys\action\SysMenuAction.class

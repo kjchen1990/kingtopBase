@@ -4,6 +4,7 @@ L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\dao\BaseDao.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\action\Result.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\action\SysPermissionAction.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\impl\SysPermissionServiceImpl.java
+L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\shiro\aop\UserAuthCacheAspect.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\impl\SysRoleDaoImpl.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\shiro\filters\SysUserFilter.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\ISysUserService.java
@@ -44,8 +45,9 @@ L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\model\SysUser.jav
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\impl\SysUserPermissionServiceImpl.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\model\SysRole.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\impl\SysRolePermissionServiceImpl.java
-L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\lang\BaseException.java
+L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\shiro\annotation\AuthCacheAnnotation.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\impl\SysPermissionDaoImpl.java
+L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\lang\BaseException.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\ISysPermissionService.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\action\SysRolePermissionAction.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\ISysMenuDao.java

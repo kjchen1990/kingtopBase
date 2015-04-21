@@ -43,7 +43,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.system.html</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.action.logFile.%d{yyyy-MM-dd}.html
+			<fileNamePattern>${LOG_BASEDIR}\${APP_Name}\${APP_Name}.system.logFile.%d{yyyy-MM-dd}.html
 			</fileNamePattern>
 			<maxHistory>90</maxHistory>
 		</rollingPolicy>
@@ -54,19 +54,30 @@
 	<logger name="cn.kingtop.sys.action" addtivity="false" level="INFO">
 		<appender-ref ref="actionLog" />
 	</logger>
-	<logger name="cn.kingtop..dao" addtivity="false" level="INFO">
+	<logger name="cn.kingtop.*.dao" addtivity="false" level="INFO">
 		<appender-ref ref="serviceLog" />
 	</logger>
-	<logger name="cn.kingtop..service" addtivity="false" level="INFO">
+	<logger name="cn.kingtop.*.service" addtivity="false" level="INFO">
 		<appender-ref ref="serviceLog" />
 	</logger>
-	<logger name="cn.kingtop.shiro"  level="DEBUG"></logger>
-	<logger name="org" level="info">
+	<logger name="cn.kingtop.shiro"  level="INFO"></logger>
+	<logger name="org" level="INFO">
 		<appender-ref ref="systemLog"/>
 	</logger>
-	<logger name="org.apache.catalina.core.ContainerBase" level="OFF"></logger>
 	
-	<logger name="org.apache.catalina.session" level="OFF"></logger>
+	<!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 -->
+	<logger name="org.apache.catalina.core.ContainerBase" level="WARN"></logger>
+	<logger name="org.apache.catalina.session" level="WARN"></logger>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.springframework" level="info">
+    	<appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.opensymphony" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN">
+    	<appender-ref ref="STDOUT"/>
+    </logger>
+	
 	
 	<root level="info">
 		<appender-ref ref="STDOUT" />

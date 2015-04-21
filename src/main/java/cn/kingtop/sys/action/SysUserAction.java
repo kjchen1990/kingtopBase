@@ -11,7 +11,6 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.kingtop.action.BaseAction;
 import org.kingtop.action.annotation.CurrentUser;
-import org.kingtop.lang.BaseException;
 import org.kingtop.sys.Page;
 import org.kingtop.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.kingtop.shiro.annotation.AuthCacheAnnotation;
 import cn.kingtop.sys.model.SysUser;
 import cn.kingtop.sys.service.ISysUserService;
 
@@ -37,6 +37,7 @@ public class SysUserAction extends BaseAction{
 		this.sysUserService = sysUserService;
 	}
 	
+	@AuthCacheAnnotation
 	@RequestMapping(value = {"index","/"})
 	public String showIndex(@CurrentUser(value=Constants.CURRENT_USER)SysUser user, Model model){
 		model.addAttribute("user", user);

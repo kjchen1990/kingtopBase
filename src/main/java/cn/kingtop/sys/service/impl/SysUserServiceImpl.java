@@ -11,6 +11,7 @@ import org.kingtop.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.kingtop.shiro.annotation.AuthCacheAnnotation;
 import cn.kingtop.sys.dao.ISysPermissionDao;
 import cn.kingtop.sys.dao.ISysRoleDao;
 import cn.kingtop.sys.dao.ISysUserDao;
@@ -92,6 +93,7 @@ public class SysUserServiceImpl extends BaseService<SysUser> implements ISysUser
 		return null;
 	}
 
+	@AuthCacheAnnotation
 	@Override
 	public SysUser findByUsername(String username) {
 		try {
