@@ -26,7 +26,7 @@ import cn.kingtop.sys.service.ISysUserService;
 @Aspect
 public class UserAuthCacheAspect {
 	
-	private Cache<String, SimpleAuthorizationInfo> authorizationInfoCache = null;
+	private Cache<String, SimpleAuthorizationInfo> authorizationCache = null;
 	
 	private ISysUserService sysUserService;
 
@@ -101,27 +101,27 @@ public class UserAuthCacheAspect {
 				if (hasAnnotation) {
 					String username = (String) SecurityUtils.getSubject().getPrincipal();
 					
-					if(authorizationInfoCache == null)
-						authorizationInfoCache = cacheManager.getCache("authorizationInfoCache");
+					if(authorizationCache == null)
+						authorizationCache = cacheManager.getCache("authorizationCache");
 					
 					AuthCacheAnnotation authCacheAnnotation = method.getAnnotation(AuthCacheAnnotation.class);
-					SimpleAuthorizationInfo authorizationInfo = authorizationInfoCache.get(username);
+					SimpleAuthorizationInfo authorizationInfo = authorizationCache.get(username);
 					//判断角色的清空和重新缓存
 					if(authCacheAnnotation.restoreRolesCache()){
 						if(authorizationInfo == null)
 							authorizationInfo = new SimpleAuthorizationInfo();
 						authorizationInfo.setRoles(sysUserService.findRoles(username));
-						authorizationInfoCache.put(username, authorizationInfo);
+						authorizationCache.put(username, authorizationInfo);
 					}else{
 						if(authCacheAnnotation.clearRolesCache() && authorizationInfo != null){
 							authorizationInfo.setRoles(null);
-							authorizationInfoCache.put(username, authorizationInfo);
+							authorizationCache.put(username, authorizationInfo);
 						}
 						if(authCacheAnnotation.addRolesCache()){
 							if(authorizationInfo == null)
 								authorizationInfo = new SimpleAuthorizationInfo();
 							authorizationInfo.setRoles(sysUserService.findRoles(username));
-							authorizationInfoCache.put(username, authorizationInfo);
+							authorizationCache.put(username, authorizationInfo);
 						}
 					}
 					//判断权限的清空和重新缓存
@@ -129,17 +129,17 @@ public class UserAuthCacheAspect {
 						if(authorizationInfo == null)
 							authorizationInfo = new SimpleAuthorizationInfo();
 						authorizationInfo.setStringPermissions(sysUserService.findPermissions(username));
-						authorizationInfoCache.put(username, authorizationInfo);
+						authorizationCache.put(username, authorizationInfo);
 					}else{
 						if(authCacheAnnotation.clearPermission() && authorizationInfo != null){
 							authorizationInfo.setStringPermissions(null);
-							authorizationInfoCache.put(username, authorizationInfo);
+							authorizationCache.put(username, authorizationInfo);
 						}
 						if(authCacheAnnotation.addPermission()){
 							if(authorizationInfo == null)
 								authorizationInfo = new SimpleAuthorizationInfo();
 							authorizationInfo.setStringPermissions(sysUserService.findPermissions(username));
-							authorizationInfoCache.put(username, authorizationInfo);
+							authorizationCache.put(username, authorizationInfo);
 						}
 					}
 				}

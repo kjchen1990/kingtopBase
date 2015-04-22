@@ -20,6 +20,11 @@ import javax.persistence.Transient;
 @Table(name="SYS_USER")
 public class SysUser implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6779801571876746262L;
+
 	@Id 
 	@Column(name="ID")
 	@SequenceGenerator(name="seq", sequenceName="SYS_USER_ID_SEQU")

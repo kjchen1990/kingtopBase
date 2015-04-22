@@ -30,7 +30,7 @@ import cn.kingtop.sys.service.ISysUserService;
  */
 public class UserRealm extends AuthorizingRealm {
 	
-	private Cache<String, SimpleAuthorizationInfo> authorizationInfoCache;
+	private Cache<String, SimpleAuthorizationInfo> authorizationCache;
 	private Cache<String, SysUser> userCache;
 
 	private ISysUserService sysUserService;
@@ -44,7 +44,7 @@ public class UserRealm extends AuthorizingRealm {
 	}
 	
 	public UserRealm(CacheManager cacheManager){
-		this.authorizationInfoCache = cacheManager.getCache("authorizationInfoCache");
+		this.authorizationCache = cacheManager.getCache("authorizationCache");
 		this.userCache = cacheManager.getCache("userCache");
 	}
 
@@ -52,12 +52,12 @@ public class UserRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		String username = (String) principals.getPrimaryPrincipal();
 
-		SimpleAuthorizationInfo authorizationInfo = this.authorizationInfoCache.get(username);
+		SimpleAuthorizationInfo authorizationInfo = this.authorizationCache.get(username);
 		if(authorizationInfo == null){
 			authorizationInfo = new SimpleAuthorizationInfo();
 			authorizationInfo.setRoles(sysUserService.findRoles(username));
 			authorizationInfo.setStringPermissions(sysUserService.findPermissions(username));
-			this.authorizationInfoCache.put(username, authorizationInfo);
+			this.authorizationCache.put(username, authorizationInfo);
 		}
 		return authorizationInfo;
 	}

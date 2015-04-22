@@ -19,6 +19,7 @@ L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\action\bind\CurrentU
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\action\SysMenuAction.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\util\SpringUtils.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\dao\IBaseDao.java
+L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\shiro\aop\UserCacheAspect.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\sys\User.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\util\JsonUtil.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\ISysRolePermissionDao.java
@@ -35,6 +36,7 @@ L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\impl\SysMenuD
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\action\SysMenuPermissionAction.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\model\SysRolePermission.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\ISysMenuPermissionDao.java
+L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\util\AspectUtil.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\ISysRolePermissionService.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\ISysUserRoleDao.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\lang\ErrorCode.java
@@ -58,6 +60,7 @@ L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\ISysUserDao.j
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\model\SysMenuPermission.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\util\Constants.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\org\kingtop\sys\Config.java
+L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\shiro\annotation\UserCacheAnnotation.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\service\ISysMenuPermissionService.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\dao\ISysUserPermissionDao.java
 L:\java\javaWorkspace\kingtopBase\src\main\java\cn\kingtop\sys\model\SysUserRole.java
