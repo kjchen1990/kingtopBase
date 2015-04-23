@@ -2,126 +2,156 @@ package org.kingtop.service;
 
 import java.util.List;
 
-import org.kingtop.dao.BaseDao;
+import org.kingtop.dao.IBaseDao;
 import org.kingtop.lang.BaseException;
 import org.kingtop.sys.Page;
-import org.kingtop.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-public abstract class BaseService<T> implements IBaseService<T> {
+public class BaseService<T> implements IBaseService<T> {
 	protected Logger log = LoggerFactory.getLogger(getClass());
-	
-	private BaseDao<T> baseDao;
 
-	public BaseDao<T> getBaseDao() {
+	private IBaseDao<T> baseDao;
+
+	public IBaseDao<T> getBaseDao() {
 		return baseDao;
 	}
-	
+
 	@Autowired
-	public void setBaseDao(BaseDao<T> baseDao) {
+	public void setBaseDao(IBaseDao<T> baseDao) {
 		this.baseDao = baseDao;
 	}
 
-	public Object getObject(String id) throws BaseException {
-		try {
-			AssertUtil.notEmpty(id, "9001", this.log);
-			return this.baseDao.getObject(id);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+	public T getObject(String id) throws BaseException {
+		return this.baseDao.getObject(id);
 	}
 
-	public Object getObject(long id) throws BaseException {
-		try {
-			return this.baseDao.getObject(id);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+	public T getObject(long id) throws BaseException {
+		return this.baseDao.getObject(id);
 	}
 
-	public Object getObject(int id) throws BaseException {
-		try {
-			return this.baseDao.getObject(id);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+	public T getObject(int id) throws BaseException {
+		return this.baseDao.getObject(id);
 	}
 
 	public void addObject(T modelObject) throws BaseException {
-		try {
-			AssertUtil.notNull(modelObject, "9002", this.log);
-			this.baseDao.addObject(modelObject);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+		this.baseDao.addObject(modelObject);
 	}
 
 	public void saveObject(T modelObject) throws BaseException {
-		try {
-			AssertUtil.notNull(modelObject, "9002", this.log);
-			this.baseDao.addObject(modelObject);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+		this.baseDao.addObject(modelObject);
 	}
 
 	public void updateObject(T modelObject) throws BaseException {
-		try {
-			AssertUtil.notNull(modelObject, "9002", this.log);
-			this.baseDao.updateObject(modelObject);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+		this.baseDao.updateObject(modelObject);
 	}
 
 	public void deleteObject(String id) throws BaseException {
-		try {
-			AssertUtil.notEmpty(id, "9001", this.log);
-			this.baseDao.deleteObject(id);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+		this.baseDao.deleteObject(id);
 	}
 
 	public void deleteObject(String[] ids) throws BaseException {
-		try {
-			for (int i = 0; i < ids.length; i++) {
-				AssertUtil.notEmpty(ids[i], "9001", this.log);
-				this.baseDao.deleteObject(ids[i]);
-			}
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
+		for (int i = 0; i < ids.length; i++) {
+			this.baseDao.deleteObject(ids[i]);
 		}
 	}
 
 	public void deleteObject(long[] ids) throws BaseException {
-		try {
-			for (int i = 0; i < ids.length; i++)
-				this.baseDao.deleteObject(ids[i]);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+		for (int i = 0; i < ids.length; i++)
+			this.baseDao.deleteObject(ids[i]);
 	}
 
 	public List getObjects() throws BaseException {
-		try {
-			return this.baseDao.getObjects();
-		} catch (Exception e) {
-			throw new BaseException(e, this.log);
-		}
+		return this.baseDao.getObjects();
 	}
 
-	//@Transactional(readOnly=true,propagation=Propagation.SUPPORTS)
 	public Page<T> findPage(int currPage, int pageSize) throws BaseException {
-		try {
-			return this.baseDao.findPage(currPage, pageSize);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BaseException(e, this.log);
-		}
+		return this.baseDao.findPage(currPage, pageSize);
+	}
+
+	@Override
+	public void saveOrUpdate(T modelObject) throws BaseException {
+		this.baseDao.saveOrUpdate(modelObject);
+	}
+
+	@Override
+	public void deleteObject(long id) throws BaseException {
+		this.baseDao.deleteObject(id);
+	}
+
+	@Override
+	public void deleteObject(int id) throws BaseException {
+		this.baseDao.deleteObject(id);
+	}
+
+	@Override
+	public void deleteObject(T t) throws BaseException {
+		this.baseDao.deleteObject(t);
+	}
+
+	@Override
+	public void saveList(List<T> modelList) throws BaseException {
+		this.baseDao.saveList(modelList);
+	}
+
+	@Override
+	public List<T> findByHql(String hql) throws BaseException {
+		return this.baseDao.findByHql(hql);
+	}
+
+	@Override
+	public List findByHql(String hql, Object... paramlist) throws BaseException {
+		return this.baseDao.findByHql(hql, paramlist);
+	}
+
+	@Override
+	public Page findPageHql(String hql, int currPage, int pageSize) throws BaseException {
+		return this.findPageHql(hql, currPage, pageSize);
+	}
+
+	@Override
+	public int executeHql(String hql, Object... paramlist) throws BaseException {
+		return this.executeHql(hql, paramlist);
+	}
+
+	@Override
+	public List<T> findBySQL(String sql) throws BaseException {
+		return this.findBySQL(sql);
+	}
+
+	@Override
+	public List<T> findBySQL(String sql, Object... paramlist) throws BaseException {
+		return this.findBySQL(sql, paramlist);
+	}
+
+	@Override
+	public List findByFreeSQL(String sql, Class outModelClass, Object... paramlist) throws BaseException {
+		return this.findByFreeSQL(sql, outModelClass, paramlist);
+	}
+
+	@Override
+	public List findByFreeSQL(String sql, Class outModelClass) throws BaseException {
+		return this.findByFreeSQL(sql, outModelClass);
+	}
+
+	@Override
+	public Page<T> findPageBySQL(String sql, int currPage, int pageSize) throws BaseException {
+		return this.findPageBySQL(sql, currPage, pageSize);
+	}
+
+	@Override
+	public Page findPageByFreeSQL(String sql, int currPage, int pageSize) throws BaseException {
+		return this.findPageByFreeSQL(sql, currPage, pageSize);
+	}
+
+	@Override
+	public Page findPageByFreeSQL(String sql, int currPage, int pageSize, Class outModelClass) throws BaseException {
+		return this.findPageByFreeSQL(sql, currPage, pageSize, outModelClass);
+	}
+
+	@Override
+	public int executeSql(String sql, Object... paramlist) throws BaseException {
+		return this.baseDao.executeSql(sql, paramlist);
 	}
 }

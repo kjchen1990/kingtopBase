@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class BaseDao<T> implements IBaseDao<T>{
+public abstract class BaseDao<T> implements IBaseDao<T> {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
 	protected Class modelClass;
@@ -60,8 +60,7 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	@SuppressWarnings("rawtypes")
 	private Class getSuperClassType(Class clazz) {
 
-		Type[] params = ((ParameterizedType) clazz.getGenericSuperclass())
-				.getActualTypeArguments();
+		Type[] params = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
 
 		if (!(params[0] instanceof Class)) {
 
@@ -71,25 +70,41 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	}
 
 	public final T getObject(long id) throws BaseException {
-		Serializable idTemp = new Long(id);
-		return getObject(idTemp);
+		try {
+			Serializable idTemp = new Long(id);
+			return getObject(idTemp);
+		}
+		catch (Exception e) {
+			throw new BaseException(e, this.log, id);
+		}
 	}
 
 	public final T getObject(int id) throws BaseException {
-		Serializable idTemp = new Long(id);
-		return getObject(idTemp);
+		try {
+			Serializable idTemp = new Long(id);
+			return getObject(idTemp);
+		}
+		catch (Exception e) {
+			throw new BaseException(e, this.log, id);
+		}
 	}
 
 	public final T getObject(String id) throws BaseException {
-		Serializable idTemp = new String(id);
-		return getObject(idTemp);
+		try {
+			Serializable idTemp = new String(id);
+			return getObject(idTemp);
+		}
+		catch (Exception e) {
+			throw new BaseException(e, this.log, id);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public final T getObject(Serializable id) throws BaseException {
 		try {
 			return (T) getSession().get(modelClass, id);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, id);
 		}
 	}
@@ -97,7 +112,8 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	public final void addObject(T modelObject) throws BaseException {
 		try {
 			getSession().save(modelObject);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, modelObject);
 		}
 	}
@@ -105,7 +121,8 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	public final void saveOrUpdate(T modelObject) throws BaseException {
 		try {
 			getSession().saveOrUpdate(modelObject);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, modelObject);
 		}
 	}
@@ -113,7 +130,8 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	public final void updateObject(T modelObject) throws BaseException {
 		try {
 			getSession().update(modelObject);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, modelObject);
 		}
 	}
@@ -126,26 +144,36 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 		deleteObject(Integer.valueOf(id));
 	}
 
-	public void deleteObject(int id) {
-		Session session = sessionFactory.getCurrentSession();
-		String sql = "delete from " + modelClass.getName() + " where id = :id";
-		Query q = session.createQuery(sql);
-		q.setInteger("id", id);
-		q.executeUpdate();
+	public void deleteObject(int id) throws BaseException {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			String sql = "delete from " + modelClass.getName() + " where id = :id";
+			Query q = session.createQuery(sql);
+			q.setInteger("id", id);
+			q.executeUpdate();
+		}
+		catch (HibernateException e) {
+			throw new BaseException(e, this.log, id);
+		}
 	}
 
-	public void deleteObject(T t) {
-		Session session = sessionFactory.getCurrentSession();
-		session.delete(t);
+	public void deleteObject(T t) throws BaseException {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.delete(t);
+		}
+		catch (HibernateException e) {
+			throw new BaseException(e, this.log, t);
+		}
 	}
 
 	public final List<T> getObjects() throws BaseException {
 		String queryString = "";
 		try {
-			queryString = "from " + this.modelClass.getSimpleName()
-					+ getDefaultOrder();
+			queryString = "from " + this.modelClass.getSimpleName() + getDefaultOrder();
 			return findByHql(queryString);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, queryString);
 		}
 	}
@@ -162,7 +190,8 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 					getSession().clear();
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log);
 		}
 	}
@@ -174,21 +203,27 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	 * @throws BaseException
 	 */
 	@SuppressWarnings("unchecked")
-	protected final List<T> findByHql(String queryString) throws BaseException {
+	public final List<T> findByHql(String hql) throws BaseException {
 		try {
-			Query q = getSession().createQuery(queryString);
+			Query q = getSession().createQuery(hql);
 			return q.list();
-		} catch (Exception e) {
-			throw new BaseException(e, this.log, queryString);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new BaseException(e, this.log, hql);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getObjectsByParams(final String hql,
-			final Object... paramlist) {
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		setParameters(query, paramlist);
-		return query.list();
+	public List<T> findByHql(final String hql, final Object... paramlist) throws BaseException {
+		try {
+			Query query = sessionFactory.getCurrentSession().createQuery(hql);
+			setParameters(query, paramlist);
+			return query.list();
+		}
+		catch (HibernateException e) {
+			throw new BaseException(e, this.log, hql);
+		}
 	}
 
 	/**
@@ -201,14 +236,17 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 			for (int i = 0; i < paramlist.length; i++) {
 				if (paramlist[i] instanceof Date) {
 					query.setTimestamp(i, (Date) paramlist[i]);
-				} else if (paramlist[i] instanceof String) {
+				}
+				else if (paramlist[i] instanceof String) {
 					query.setString(i, (String) paramlist[i]);
-				} else if (paramlist[i] instanceof Integer) {
-					query.setInteger(i,
-							Integer.valueOf(paramlist[i].toString()));
-				} else if (paramlist[i] instanceof Long) {
+				}
+				else if (paramlist[i] instanceof Integer) {
+					query.setInteger(i, Integer.valueOf(paramlist[i].toString()));
+				}
+				else if (paramlist[i] instanceof Long) {
 					query.setLong(i, Long.valueOf(paramlist[i].toString()));
-				} else {
+				}
+				else {
 					query.setParameter(i, paramlist[i]);
 				}
 			}
@@ -216,76 +254,69 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public final Page<T> findPage(int currPage, int pageSize)
-			throws BaseException {
+	public final Page<T> findPage(int currPage, int pageSize) throws BaseException {
 		String queryString = "";
 		try {
-			queryString = "from " + this.modelClass.getSimpleName()
-					+ getDefaultOrder();
+			queryString = "from " + this.modelClass.getSimpleName() + getDefaultOrder();
 			System.out.println(queryString);
 			int totalCount = countDataTotal(queryString, getSession());
 
 			int startRow = (currPage - 1) * pageSize;
-			if (startRow < 0)
-				startRow = 0;
-			Query query = getSession().createQuery(queryString)
-					.setFirstResult(startRow).setMaxResults(pageSize);
+			if (startRow < 0) startRow = 0;
+			Query query = getSession().createQuery(queryString).setFirstResult(startRow).setMaxResults(pageSize);
 
 			List modelList = query.list();
 			return new Page(modelList, totalCount, currPage, pageSize);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			throw new BaseException(e, this.log, queryString);
 		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Page findPage(String queryString, int currPage, int pageSize) throws BaseException {
+	public Page findPageByHql(String hql, int currPage, int pageSize) throws BaseException {
 		try {
 			Session session = getSession();
-			int totalCount = countDataTotal(queryString, session);
+			int totalCount = countDataTotal(hql, session);
 
 			int startRow = (currPage - 1) * pageSize;
-			if (startRow < 0)
-				startRow = 0;
-			Query query = session.createQuery(queryString)
-					.setFirstResult(startRow).setMaxResults(pageSize);
+			if (startRow < 0) startRow = 0;
+			Query query = session.createQuery(hql).setFirstResult(startRow).setMaxResults(pageSize);
 
 			List modelList = query.list();
 			return new Page(modelList, totalCount, currPage, pageSize);
-		} catch (Exception e) {
-			throw new BaseException(e, this.log, queryString);
+		}
+		catch (Exception e) {
+			throw new BaseException(e, this.log, hql);
 		}
 	}
 
 	/**
 	 * 获取总条数
 	 * @param queryString hql语句
-	 * @param session 
+	 * @param session
 	 * @return
 	 * @throws BaseException
 	 */
-	protected int countDataTotal(String queryString, Session session)
-			throws BaseException {
+	protected int countDataTotal(String queryString, Session session) throws BaseException {
 		try {
 			int totalCount = 0;
 			String lowerHql = queryString.trim().toLowerCase();
 			int fromPos = 0;
 			int orderPos = lowerHql.length();
-			if (!lowerHql.startsWith("from "))
-				fromPos = lowerHql.indexOf(" from ") + 1;
+			if (!lowerHql.startsWith("from ")) fromPos = lowerHql.indexOf(" from ") + 1;
 			orderPos = lowerHql.indexOf(" order by ") + 1;
 			String countHql;
 			if (orderPos != 0)
-				countHql = (new StringBuilder("select count(*) ")).append(
-						queryString.substring(fromPos, orderPos)).toString();
+				countHql = (new StringBuilder("select count(*) ")).append(queryString.substring(fromPos, orderPos)).toString();
 			else
-				countHql = (new StringBuilder("select count(*) ")).append(
-						queryString.substring(fromPos)).toString();
+				countHql = (new StringBuilder("select count(*) ")).append(queryString.substring(fromPos)).toString();
 			int distinctPos = lowerHql.indexOf(" distinct ");
 			if (distinctPos >= 0 && distinctPos < fromPos) {
 				totalCount = session.createQuery(queryString).list().size();
-			} else {
+			}
+			else {
 				Object value = session.createQuery(countHql).uniqueResult();
 				if (value == null)
 					totalCount = 0;
@@ -293,28 +324,31 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 					totalCount = ((Long) value).intValue();
 			}
 			return totalCount;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, queryString);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public List findBySQL(final String sql) throws BaseException {
+	public List<T> findBySQL(final String sql) throws BaseException {
 		try {
 			SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+			sqlQuery.addEntity(this.modelClass);
 			return sqlQuery.list();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
 
-	public List findBySQL(final String sql, final Object... paramlist)
-			throws BaseException {
+	public List<T> findBySQL(final String sql, final Object... paramlist) throws BaseException {
 		try {
 			SQLQuery sqlQuery = getSession().createSQLQuery(sql);
 			setSqlParameters(sqlQuery, paramlist);
+			sqlQuery.addEntity(this.modelClass);
 			return sqlQuery.list();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
@@ -325,42 +359,46 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 				if (paramlist[i] instanceof Date) {
 					// TODO 难道这是bug 使用setParameter不行？？
 					sqlQuery.setTimestamp(i, (Date) paramlist[i]);
-				} else if (paramlist[i] instanceof String) {
+				}
+				else if (paramlist[i] instanceof String) {
 					sqlQuery.setString(i, (String) paramlist[i]);
-				} else if (paramlist[i] instanceof Integer) {
-					sqlQuery.setInteger(i,
-							Integer.valueOf(paramlist[i].toString()));
-				} else if (paramlist[i] instanceof Long) {
+				}
+				else if (paramlist[i] instanceof Integer) {
+					sqlQuery.setInteger(i, Integer.valueOf(paramlist[i].toString()));
+				}
+				else if (paramlist[i] instanceof Long) {
 					sqlQuery.setLong(i, Long.valueOf(paramlist[i].toString()));
-				} else {
+				}
+				else {
 					sqlQuery.setParameter(i, paramlist[i]);
 				}
 			}
 		}
 	}
 
-	public List findByFreeSQL(final String sql, final Class outModelClass, final Object... paramlist)
-			throws BaseException {
+	public List findByFreeSQL(final String sql, final Class outModelClass, final Object... paramlist) throws BaseException {
 		try {
-			SQLQuery sqlQuery = session.createSQLQuery(sql).addEntity(
-					outModelClass);
+			SQLQuery sqlQuery = session.createSQLQuery(sql).addEntity(outModelClass);
 			setSqlParameters(sqlQuery, paramlist);
 			return sqlQuery.list();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
 
 	public List findByFreeSQL(final String sql, final Class outModelClass) throws BaseException {
 		try {
-			return findByFreeSQL(sql, outModelClass, new Object[]{});
-		} catch (Exception e) {
+			return findByFreeSQL(sql, outModelClass, new Object[] {});
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
 
-	public final Page findPageBySQL(String sql, int currPage, int pageSize) throws BaseException {
-		return findPageByFreeSQL(sql,currPage,pageSize,this.modelClass);
+	@SuppressWarnings("unchecked")
+	public final Page<T> findPageBySQL(String sql, int currPage, int pageSize) throws BaseException {
+		return findPageByFreeSQL(sql, currPage, pageSize, this.modelClass);
 	}
 
 	public final Page findPageByFreeSQL(String sql, int currPage, int pageSize) throws BaseException {
@@ -369,14 +407,13 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 			int totalCount = countDataTotalBySQL(sql, session);
 
 			int startRow = (currPage - 1) * pageSize;
-			if (startRow < 0)
-				startRow = 0;
-			Query query = session.createSQLQuery(sql).setFirstResult(startRow)
-					.setMaxResults(pageSize);
+			if (startRow < 0) startRow = 0;
+			Query query = session.createSQLQuery(sql).setFirstResult(startRow).setMaxResults(pageSize);
 
 			List modelList = query.list();
 			return new Page(modelList, totalCount, currPage, pageSize);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
@@ -388,36 +425,37 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 			int totalCount = countDataTotalBySQL(sql, session);
 
 			int startRow = (currPage - 1) * pageSize;
-			if (startRow < 0)
-				startRow = 0;
-			Query query = session.createSQLQuery(sql).addEntity(outModelClass)
-					.setFirstResult(startRow).setMaxResults(pageSize);
+			if (startRow < 0) startRow = 0;
+			Query query = session.createSQLQuery(sql).addEntity(outModelClass).setFirstResult(startRow).setMaxResults(pageSize);
 
 			List modelList = query.list();
 			return new Page(modelList, totalCount, currPage, pageSize);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
 
-	public final int executeSql(final String sql, final Object... paramlist) {
+	public final int executeSql(final String sql, final Object... paramlist) throws BaseException {
 		try {
 			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sql);
 			setSqlParameters(query, paramlist);
 			Object result = query.executeUpdate();
 			return result == null ? 0 : ((Integer) result).intValue();
-		} catch (HibernateException e) {
+		}
+		catch (HibernateException e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
 
-	public int executeHql(final String hql, final Object... paramlist) {
+	public int executeHql(final String hql, final Object... paramlist) throws BaseException {
 		try {
 			Query query = sessionFactory.getCurrentSession().createQuery(hql);
 			setParameters(query, paramlist);
 			Object result = query.executeUpdate();
 			return result == null ? 0 : ((Integer) result).intValue();
-		} catch (HibernateException e) {
+		}
+		catch (HibernateException e) {
 			throw new BaseException(e, this.log, hql);
 		}
 	}
@@ -429,34 +467,33 @@ public abstract class BaseDao<T> implements IBaseDao<T>{
 	 * @return
 	 * @throws BaseException
 	 */
-	protected int countDataTotalBySQL(String sql, Session session)
-			throws BaseException {
+	protected int countDataTotalBySQL(String sql, Session session) throws BaseException {
 		try {
-			 int totalCount = 0;
-	            String lowerHql = sql.trim().toLowerCase();
-	            int fromPos = 0;
-	            int orderPos = lowerHql.length();
-	            fromPos = lowerHql.indexOf(" from ") + 1;
-	            orderPos = lowerHql.indexOf(" order by ") + 1;
-	            String countSql;
-	            if(orderPos != 0)
-	                countSql = (new StringBuilder("select count(*) as num ")).append(sql.substring(fromPos, orderPos)).toString();
-	            else
-	                countSql = (new StringBuilder("select count(*) as num ")).append(sql.substring(fromPos)).toString();
-	            int distinctPos = lowerHql.indexOf(" distinct ");
-	            if(distinctPos >= 0 && distinctPos < fromPos)
-	            {
-	                totalCount = session.createQuery(sql).list().size();
-	            } else
-	            {
-	                Long value = (Long) session.createSQLQuery(countSql).uniqueResult();
-	                if(value == null)
-	                    totalCount = 0;
-	                else
-	                    totalCount = value.intValue();
-	            }
-	            return totalCount;
-		} catch (Exception e) {
+			int totalCount = 0;
+			String lowerHql = sql.trim().toLowerCase();
+			int fromPos = 0;
+			int orderPos = lowerHql.length();
+			fromPos = lowerHql.indexOf(" from ") + 1;
+			orderPos = lowerHql.indexOf(" order by ") + 1;
+			String countSql;
+			if (orderPos != 0)
+				countSql = (new StringBuilder("select count(*) as num ")).append(sql.substring(fromPos, orderPos)).toString();
+			else
+				countSql = (new StringBuilder("select count(*) as num ")).append(sql.substring(fromPos)).toString();
+			int distinctPos = lowerHql.indexOf(" distinct ");
+			if (distinctPos >= 0 && distinctPos < fromPos) {
+				totalCount = session.createQuery(sql).list().size();
+			}
+			else {
+				Long value = (Long) session.createSQLQuery(countSql).uniqueResult();
+				if (value == null)
+					totalCount = 0;
+				else
+					totalCount = value.intValue();
+			}
+			return totalCount;
+		}
+		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
 		}
 	}
