@@ -14,7 +14,7 @@ public interface ISysPermissionDao extends IBaseDao<SysPermission>{
 	 * @param roleIds 角色ids
 	 * @return
 	 */
-	List<SysPermission> findPermissionByUserIdRoleIds(long userId, String roleIds);
+	List<SysPermission> findPermissionByUserIdRoleIds(long userId);
 
  
 }

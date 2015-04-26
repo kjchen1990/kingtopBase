@@ -77,14 +77,7 @@ public class SysUserServiceImpl extends BaseService<SysUser> implements ISysUser
 	public Set<String> findPermissions(String username) {
 		SysUser user = findByUsername(username);
 		if(user != null){
-			List<SysRole> list = this.sysRoleDao.findSysRoleByIds(user.getId());
-			StringBuffer roleIds = new StringBuffer();
-			for (SysRole sysRole : list) {
-				if(!"".equals(roleIds.toString()))
-					roleIds.append(",");
-				roleIds.append(sysRole.getId());
-			}
-			List<SysPermission> permissionList = sysPermissionDao.findPermissionByUserIdRoleIds(user.getId(), roleIds.toString());
+			List<SysPermission> permissionList = sysPermissionDao.findPermissionByUserIdRoleIds(user.getId());
 			Set<String> set = new HashSet<String>();
 			for (SysPermission sysPermission : permissionList) {
 				set.add(sysPermission.getPermission());
