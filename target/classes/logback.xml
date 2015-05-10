@@ -1,6 +1,6 @@
 <configuration scan="true" scanPeriod="60000" >
 	<property name="APP_Name" value="kingtopBase" />
-	<property name="LOG_BASEDIR" value="L:\\log" />
+	<property name="LOG_BASEDIR" value="G:\\log" />
 	<contextName>${APP_Name}</contextName>
 	<!-- 控制台输出 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

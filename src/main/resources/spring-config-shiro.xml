@@ -134,7 +134,7 @@
                 /authenticated = authc
                 /statics/** = anon
                 /header.html = anon
-                /** = user,sysUser
+                <!-- /** = user,sysUser -->
             </value>
         </property>
     </bean>
