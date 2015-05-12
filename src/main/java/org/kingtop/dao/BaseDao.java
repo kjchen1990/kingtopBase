@@ -11,8 +11,10 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.kingtop.lang.BaseException;
 import org.kingtop.sys.Page;
+import org.kingtop.util.BeanPropertyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -408,7 +410,7 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
 
 			int startRow = (currPage - 1) * pageSize;
 			if (startRow < 0) startRow = 0;
-			Query query = session.createSQLQuery(sql).setFirstResult(startRow).setMaxResults(pageSize);
+			Query query = session.createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).setFirstResult(startRow).setMaxResults(pageSize);
 
 			List modelList = query.list();
 			return new Page(modelList, totalCount, currPage, pageSize);
@@ -426,10 +428,11 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
 
 			int startRow = (currPage - 1) * pageSize;
 			if (startRow < 0) startRow = 0;
-			Query query = session.createSQLQuery(sql).addEntity(outModelClass).setFirstResult(startRow).setMaxResults(pageSize);
-
+			Query query = session.createSQLQuery(sql).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).setFirstResult(startRow).setMaxResults(pageSize);
 			List modelList = query.list();
-			return new Page(modelList, totalCount, currPage, pageSize);
+			List resultList = BeanPropertyUtil.converMapToBean(outModelClass, modelList);
+
+			return new Page(resultList, totalCount, currPage, pageSize);
 		}
 		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);
