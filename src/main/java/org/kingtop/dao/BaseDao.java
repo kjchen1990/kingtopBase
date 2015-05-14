@@ -36,14 +36,8 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
 		this.sessionFactory = sessionFactory;
 	}
 
-	private Session session;
-
 	public Session getSession() {
-		return session = this.sessionFactory.getCurrentSession();
-	}
-
-	public void setSession(Session session) {
-		this.session = session;
+		return this.sessionFactory.getCurrentSession();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -380,9 +374,12 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
 
 	public List findByFreeSQL(final String sql, final Class outModelClass, final Object... paramlist) throws BaseException {
 		try {
-			SQLQuery sqlQuery = session.createSQLQuery(sql).addEntity(outModelClass);
+			SQLQuery sqlQuery = getSession().createSQLQuery(sql);
 			setSqlParameters(sqlQuery, paramlist);
-			return sqlQuery.list();
+			sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+			List modelList = sqlQuery.list();
+			List resultList = BeanPropertyUtil.converMapToBean(outModelClass, modelList);
+			return resultList;
 		}
 		catch (Exception e) {
 			throw new BaseException(e, this.log, sql);

@@ -47,7 +47,12 @@ public class BeanPropertyUtil {
                          if(value instanceof BigDecimal)
                               value = Long.valueOf(value.toString());
                          Object[] args = new Object[1];
-                         args[0] = value;
+                         Class[] types = pd.getWriteMethod().getParameterTypes();
+                         String targetClassName = types[0].getName();
+                         if("java.lang.Long".equals(targetClassName))
+                        	 args[0] = Long.valueOf(value.toString());
+                         else
+                        	 args[0] = value;
                          pd.getWriteMethod().invoke(entity, args);
                     }
                }

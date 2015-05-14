@@ -169,7 +169,10 @@ public class BaseException extends RuntimeException implements Serializable {
 					this.code = ((BaseException)this.exception).code;
 				this.userMessage = ((BaseException)this.exception).userMessage;
 			}else {
-				this.exceptionClass = this.exception.getCause().getClass().getName();
+				if(this.exception.getCause() != null)
+					this.exceptionClass = this.exception.getCause().getClass().getName();
+				else
+					this.exceptionClass = this.exception.getClass().getName();
 				ErrorCode errorCode = (ErrorCode) ExceptionConfig.systemMap.get(exceptionClass);
 				if (errorCode == null) {
 					errorCode = (ErrorCode) ExceptionConfig.systemMap.get("default");

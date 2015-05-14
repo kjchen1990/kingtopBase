@@ -49,6 +49,12 @@ public class SysMenu implements java.io.Serializable {
 	@Column(name="AVAILABLE")
 	private int available;
 	
+	/**
+	 * 系统标识
+	 */
+	@Column(name="SYS_FLAG")
+	private String sysFlag;
+	
 
 	public SysMenu(){
 		
@@ -102,6 +108,14 @@ public class SysMenu implements java.io.Serializable {
 	public int getAvailable()
 	{
 		return this.available;
+	}
+
+	public String getSysFlag() {
+		return sysFlag;
+	}
+
+	public void setSysFlag(String sysFlag) {
+		this.sysFlag = sysFlag;
 	}
 
 }
